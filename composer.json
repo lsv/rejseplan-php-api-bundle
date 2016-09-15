@@ -1,0 +1,22 @@
+{
+  "name": "lsv/rejseplan-php-api-bundle",
+  "description": "Symfony bundle for Rejseplanen.dk API",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Martin Aarhof",
+      "email": "martin.aarhof@gmail.com"
+    }
+  ],
+  "require": {
+    "symfony/config": "^2.6|^3.0",
+    "symfony/http-kernel": "^2.6|^3.0",
+    "lsv/rejseplan-php-api": "^1.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Lsv\\RejseplanApiBundle\\": ""
+    }
+  }
+}
