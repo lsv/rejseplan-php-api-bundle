@@ -23,6 +23,11 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('baseurl')
                     ->isRequired()
+                    ->info('Rejseplan API base url')
+                ->end()
+                ->scalarNode('client')
+                    ->info('Guzzle client you want to use')
+                    ->defaultNull()
                 ->end()
             ->end()
         ;

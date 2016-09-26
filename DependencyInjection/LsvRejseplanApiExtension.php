@@ -2,11 +2,11 @@
 
 namespace Lsv\RejseplanApiBundle\DependencyInjection;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Loader;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -23,79 +23,101 @@ class LsvRejseplanApiExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $client = $this->getClient($config);
         $container->addDefinitions(array(
-            'rejseplan_arrivalboard_service'     => $this->getArrivalboardService($config),
-            'rejseplan_departureboard_service' => $this->getDepartureboardService($config),
-            'rejseplan_journey_service'   => $this->getJourneyService($config),
-            'rejseplan_location_service'   => $this->getLocationService($config),
-            'rejseplan_nearbystops_service'   => $this->getNearbystopsService($config),
-            'rejseplan_trip_service'   => $this->getTripService($config),
+            'rejseplan_arrivalboard_service'     => $this->getArrivalboardService($client, $config),
+            'rejseplan_departureboard_service' => $this->getDepartureboardService($client, $config),
+            'rejseplan_journey_service'   => $this->getJourneyService($client, $config),
+            'rejseplan_location_service'   => $this->getLocationService($client, $config),
+            'rejseplan_nearbystops_service'   => $this->getNearbystopsService($client, $config),
+            'rejseplan_trip_service'   => $this->getTripService($client, $config),
         ));
     }
 
     /**
      * @param array $config
+     * @return ClientInterface|null
+     */
+    private function getClient(array $config)
+    {
+        return $config['client'];
+    }
+
+    /**
+     * @param ClientInterface $client
+     * @param array $config
      * @return Definition
      */
-    private function getArrivalboardService($config)
+    private function getArrivalboardService($client, $config)
     {
         $service = new Definition('RejseplanApi\Services\ArrivalBoard');
         $service->addArgument($config['baseurl']);
+        $service->addArgument($client);
         return $service;
     }
 
     /**
+     * @param ClientInterface $client
      * @param array $config
      * @return Definition
      */
-    private function getDepartureboardService($config)
+    private function getDepartureboardService($client, $config)
     {
         $service = new Definition('RejseplanApi\Services\DepartureBoard');
         $service->addArgument($config['baseurl']);
+        $service->addArgument($client);
         return $service;
     }
 
     /**
+     * @param ClientInterface $client
      * @param array $config
      * @return Definition
      */
-    private function getJourneyService($config)
+    private function getJourneyService($client, $config)
     {
         $service = new Definition('RejseplanApi\Services\Journey');
         $service->addArgument($config['baseurl']);
+        $service->addArgument($client);
         return $service;
     }
 
     /**
+     * @param ClientInterface $client
      * @param array $config
      * @return Definition
      */
-    private function getLocationService($config)
+    private function getLocationService($client, $config)
     {
         $service = new Definition('RejseplanApi\Services\Location');
         $service->addArgument($config['baseurl']);
+        $service->addArgument($client);
         return $service;
     }
 
     /**
+     * @param ClientInterface $client
      * @param array $config
      * @return Definition
      */
-    private function getNearbystopsService($config)
+    private function getNearbystopsService($client, $config)
     {
         $service = new Definition('RejseplanApi\Services\NearbyStops');
         $service->addArgument($config['baseurl']);
+        $service->addArgument($client);
         return $service;
     }
 
     /**
+     * @param ClientInterface $client
      * @param array $config
      * @return Definition
      */
-    private function getTripService($config)
+    private function getTripService($client, $config)
     {
         $service = new Definition('RejseplanApi\Services\Trip');
         $service->addArgument($config['baseurl']);
+        $service->addArgument($client);
         return $service;
     }
 
